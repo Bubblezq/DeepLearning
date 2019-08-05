@@ -46,6 +46,11 @@ Siamese Network算法的改进，伪孪生神经网络。这个算法与Siamese 
 <img src = 'central.png'>
 
 # 应用
+### Siamese network的用途
+- 词汇的语义相似度分析
+- 手写体识别
+- 在图像上，基于Siamese网络的视觉跟踪算法
+- nlp&cv领域都有很多应用
 
 ### Using Deep Siamese Neural Networks for Detection of Brain Asymmetries Associated with Alzheimer’s Disease and Mild Cognitive Impairment
 In recent studies, neuroanatomical volume and shape asymmetries have been seen during the course of Alzheimer’s Disease (AD) and could potentially be used as preclinical imaging biomarkers for the prediction of Mild Cognitive Impairment (MCI) and AD dementia. In this study, a deep learning framework utilizing Siamese neural networks trained on paired lateral inter-hemispheric regions is used to harness the discriminative power of whole-brain volumetric asymmetry. 
