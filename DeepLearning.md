@@ -5,7 +5,7 @@
 
 ## Siamese Network
 
-在05年由Yann Lecun提出来的。这个算法最初用于手写签字的识别，之后又应用在相似图片的处理上面，如下图所示，patch1和patch2为输入图片，两张图片分别经过卷积层（包括卷积、ReLU、最大池化等过程），得到两个特征向量，接着进入黄色的全连接层，最后输出两个图片的相似度。在Siamese Network算法中，两个patch在卷积层中的权值共享。
+在05年由Yann Lecun提出来的。用于衡量两个输入的相似程度。这个算法最初用于手写签字的识别，之后又应用在相似图片的处理上面，如下图所示，patch1和patch2为输入图片，两张图片分别经过卷积层（包括卷积、ReLU、最大池化等过程），得到两个特征向量，接着进入黄色的全连接层，最后输出两个图片的相似度。在Siamese Network算法中，两个patch在卷积层中的权值共享。
 
 - 孪生神经网络（siamese network）中，其采用的损失函数是contrastive loss，这种损失函数可以有效的处理孪生神经网络中的paired data的关系。这种损失函数最初来源于Yann LeCun的《Dimensionality Reduction by Learning an Invariant Mapping》，主要是用在降维中，即本来相似的样本，在经过降维（特征提取）后，在特征空间中，两个样本仍旧相似；而原本不相似的样本，在经过降维后，在特征空间中，两个样本仍旧不相似。
 
@@ -13,19 +13,27 @@
 
 ## Pseudo-siamese
 
-Siamese Network算法的改进，这个算法与Siamese Network的区别为：卷积层中的权值不共享，在下图中间部分可以看到。
+Siamese Network算法的改进，伪孪生神经网络。这个算法与Siamese Network的区别为：卷积层中的权值不共享，在下图中间部分可以看到。
 
-![image](https://img-blog.csdn.net/20170821151311046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcm9ndWVzaXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+<img src = 'siamese.png'>
+
+> 孪生神经网络用于处理两个输入"比较类似"的情况。伪孪生神经网络适用于处理两个输入"有一定差别"的情况。比如，我们要计算两个句子或者词汇的语义相似度，使用siamese network比较适合；如果验证标题与正文的描述是否一致（标题和正文长度差别很大），或者文字是否描述了一幅图片（一个是图片，一个是文字），就应该使用pseudo-siamese network。也就是说，要根据具体的应用，判断应该使用哪一种结构，哪一种Loss。
+
+
+##Triplet network
+输入是三个，一个正例+两个负例，或者一个负例+两个正例，训练的目标是让相同类别间的距离尽可能的小，让不同类别间的距离尽可能的大。Triplet在cifar, mnist的数据集上，效果都是很不错的，超过了siamese network。
+
+<img src = 'triplet.jpg' height='380px'>
 
 ## 2-channel
 
-1、把patch1、patch2合在一起，把这两张图片，看成是一张双通道的图像。也就是把两个(1，64，64)单通道的数据，放在一起，成为了(2，64，64)的双通道矩阵，
+1、把patch1、patch2合在一起，把这两张图片，看成是一张双通道的图像。也就是把两个(1，64，64)      单通道的数据，放在一起，成为了(2，64，64)的双通道矩阵，
 
 2、然后把这个矩阵数据作为网络的输入，这就是所谓的：2-channel。
 
 - channel这个词最先是在图片灰度上面提到的，像MNIST数据集，图片都是黑白的，channel为1，彩色图片channel为3，分为R、G、B三个channel，顾名思义，这个算法就是由两个channel组成，这两个channel就是要比较的两张图片，如下图所示，与上面Siamese Network算法的不同之处在于，这个算法合并了上面的两个卷积层，使两张图片编程一张，举个例子，有两张（1，32，32）的黑白图片，放在这个算法中，就相当于是对卷积层输入一个（2，32，32）的图片，然后在经过一层全连接，输出一个值，这个输出的值就表示两张图片的差异。
 
-![image](https://img-blog.csdn.net/20170821151324811?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcm9ndWVzaXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+<img src = 'channel.png'>
 
 - 这样，跳过了分支的显式的特征提取过程，而是直接学习相似度评价函数。最后一层直接是全连接层，输出神经元个数直接为1，直接表示两张图片的相似度。当然CNN，如果输入的是双通道图片，也就是相当于网络的输入的是2个feature map，经过第一层的卷积后网，两张图片的像素就进行了相关的加权组合并映射，这也就是说，用2-channel的方法，经过了第一次的卷积后，两张输入图片就不分你我了。而Siamese网络是到了最后全连接的时候，两张图片的相关神经元才联系在一起。
 
@@ -35,7 +43,7 @@ Siamese Network算法的改进，这个算法与Siamese Network的区别为：�
 这个算法在2-channel的基础上进行了改进，对比上下两张图，如果不考虑右侧蓝色块，仅考虑左侧的结构，和2-channel是一样的，这个算法的改进之处在于：
 首先，左侧输入的图片不再是原图，而是经过了处理，如图所示，经过了下采样，使得图像变小，Paper中介绍的原图patch大小为64*64，那么在左侧的输入为32*32。其次，右侧的输入图片为原始图片的中心部分，大小也是32*32，这样一来，左右两侧的输入图片大小相等。
 
-![image](https://img-blog.csdn.net/20170821151352073?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcm9ndWVzaXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+<img src = 'central.png'>
 
 # 应用
 
