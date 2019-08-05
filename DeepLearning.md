@@ -17,7 +17,7 @@ Siamese Network算法的改进，这个算法与Siamese Network的区别为：�
 
 ![image](https://img-blog.csdn.net/20170821151311046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcm9ndWVzaXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 
-##2-channel
+## 2-channel
 
 1、把patch1、patch2合在一起，把这两张图片，看成是一张双通道的图像。也就是把两个(1，64，64)单通道的数据，放在一起，成为了(2，64，64)的双通道矩阵，
 
