@@ -12,7 +12,7 @@ data_path = os.path.join("D:/python/jupyter-notebook/Few Shot Learning - V1/data
 train_folder = os.path.join(data_path,'images_background')
 valpath = os.path.join(data_path,'images_evaluation')
 
-save_path = "D:/python/jupyter-notebook/Few Shot Learning - V1/"
+save_path = "D:/python/jupyter-notebook/Few Shot Learning - V1/data/"
 
 lang_dict = {}
 
